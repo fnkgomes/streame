@@ -3,89 +3,33 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>frameXTV - Ultra-Fast Stream Embeds & Portal</title>
+    <title>frameXTV - Catálogo Oficial TMDB</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <script>
-        tailwind.config = { darkMode: 'class', theme: { extend: { colors: { fx: { 500: '#6366f1', 600: '#4f46e5' } } } } }
+        tailwind.config = { darkMode: 'class' }
     </script>
     <style>
         body { background-color: #09090b; color: #f4f4f5; font-family: system-ui, sans-serif; }
-        ::-webkit-scrollbar { width: 6px; height: 6px; }
-        ::-webkit-scrollbar-thumb { background: #27272a; border-radius: 3px; }
     </style>
 </head>
 <body class="min-h-screen flex flex-col">
 
-    <!-- Header / Navbar -->
     <header class="border-b border-zinc-800 bg-zinc-950/80 backdrop-blur sticky top-0 z-50">
         <div class="max-w-7xl mx-auto px-4 h-16 flex items-center justify-between">
-            <div class="flex items-center space-x-6">
-                <a href="#" onclick="switchTab('home')" class="flex items-center space-x-2">
-                    <div class="w-8 h-8 rounded-lg bg-indigo-600 flex items-center justify-center font-black text-white">fX</div>
-                    <span class="font-bold text-lg text-white tracking-wider">frame<span class="text-indigo-500">X</span>TV</span>
-                </a>
-                <nav class="hidden md:flex space-x-4 text-xs font-medium text-zinc-400">
-                    <button onclick="switchTab('home')" class="hover:text-white transition">Home</button>
-                    <button onclick="switchTab('movies')" class="hover:text-white transition">Movies</button>
-                    <button onclick="switchTab('tv')" class="hover:text-white transition">TV</button>
-                    <button onclick="switchTab('anime')" class="hover:text-white transition">Anime</button>
-                    <button onclick="switchTab('history')" class="hover:text-white transition">History</button>
-                </nav>
+            <div class="flex items-center space-x-2">
+                <div class="w-8 h-8 rounded-lg bg-indigo-600 flex items-center justify-center font-black text-white">fX</div>
+                <span class="font-bold text-lg text-white tracking-wider">frame<span class="text-indigo-500">X</span>TV</span>
             </div>
         </div>
     </header>
 
-    <!-- Main Content Container -->
-    <main class="flex-grow max-w-7xl w-full mx-auto px-4 py-8 space-y-12" id="main-content">
-        <!-- Hero Banner -->
-        <div id="hero-banner" class="relative rounded-2xl overflow-hidden bg-zinc-900 border border-zinc-800 h-96 flex items-end p-8 bg-cover bg-center">
-            <div class="absolute inset-0 bg-gradient-to-t from-zinc-950 via-zinc-950/40 to-transparent"></div>
-            <div class="relative z-10 max-w-2xl space-y-3">
-                <span id="hero-badge" class="px-2.5 py-1 bg-indigo-600/90 text-white text-[10px] font-mono rounded uppercase">Featured Premiere</span>
-                <h1 id="hero-title" class="text-3xl md:text-5xl font-extrabold text-white">Fight Club</h1>
-                <p id="hero-desc" class="text-xs md:text-sm text-zinc-300 line-clamp-2">A ticking-time-bomb insomniac and a slippery soap salesman channel maximalist primal aggression into a shocking new form of therapy.</p>
-                <div class="flex space-x-3 pt-2">
-                    <button id="hero-watch-btn" onclick="openPlayer('550')" class="bg-indigo-600 hover:bg-indigo-500 text-white px-5 py-2.5 rounded-xl font-medium text-xs flex items-center shadow-lg shadow-indigo-600/30 transition cursor-pointer">
-                        <i class="fa-solid fa-play mr-2"></i> Watch Now
-                    </button>
-                </div>
-            </div>
+    <main class="flex-grow max-w-7xl w-full mx-auto px-4 py-8 space-y-8">
+        <h2 class="text-lg font-bold text-white flex items-center"><i class="fa-solid fa-fire text-indigo-500 mr-2"></i> Lançamentos e Tendências TMDB</h2>
+        <div id="media-grid" class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-4">
+            <div class="text-zinc-500 text-xs col-span-full py-10 text-center">Carregando catálogo do TMDB...</div>
         </div>
-
-        <!-- Catalog Grids -->
-        <section class="space-y-6">
-            <h2 class="text-lg font-bold text-white flex items-center"><i class="fa-solid fa-fire text-indigo-500 mr-2"></i> Trending Streams & Cinema</h2>
-            <div id="media-grid" class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-4">
-                <!-- Fallback inicial caso a API demore -->
-                <div onclick="openPlayer('550')" class="bg-zinc-900/60 border border-zinc-800 rounded-xl overflow-hidden group cursor-pointer transition transform hover:-translate-y-1">
-                    <div class="relative aspect-[2/3] bg-zinc-950 overflow-hidden">
-                        <img src="https://images.unsplash.com/photo-1536440136628-849c177e76a1?auto=format&fit=crop&w=600&q=80" class="w-full h-full object-cover group-hover:scale-105 transition duration-500" alt="Fight Club">
-                        <div class="absolute top-2 right-2 bg-black/70 backdrop-blur px-2 py-0.5 rounded text-[10px] font-mono text-amber-400">★ 8.8</div>
-                    </div>
-                    <div class="p-3 space-y-1">
-                        <h3 class="text-xs font-bold text-white truncate">Fight Club</h3>
-                        <p class="text-[10px] text-zinc-400">1999 • <span class="uppercase">Movie</span></p>
-                    </div>
-                </div>
-                <div onclick="openPlayer('1396')" class="bg-zinc-900/60 border border-zinc-800 rounded-xl overflow-hidden group cursor-pointer transition transform hover:-translate-y-1">
-                    <div class="relative aspect-[2/3] bg-zinc-950 overflow-hidden">
-                        <img src="https://images.unsplash.com/photo-1518709268805-4e9042af9f23?auto=format&fit=crop&w=600&q=80" class="w-full h-full object-cover group-hover:scale-105 transition duration-500" alt="Breaking Bad">
-                        <div class="absolute top-2 right-2 bg-black/70 backdrop-blur px-2 py-0.5 rounded text-[10px] font-mono text-amber-400">★ 9.5</div>
-                    </div>
-                    <div class="p-3 space-y-1">
-                        <h3 class="text-xs font-bold text-white truncate">Breaking Bad</h3>
-                        <p class="text-[10px] text-zinc-400">2008 • <span class="uppercase">TV</span></p>
-                    </div>
-                </div>
-            </div>
-        </section>
     </main>
-
-    <!-- Footer -->
-    <footer class="border-t border-zinc-800 bg-zinc-950 py-8 text-center text-xs text-zinc-500">
-        <p>&copy; 2026 frameXTV Portal. Ultra-fast HTML5 stream embeds engine.</p>
-    </footer>
 
     <script>
         async function loadCatalog() {
@@ -95,7 +39,7 @@
                 if(data.success && data.results.length > 0) {
                     const grid = document.getElementById('media-grid');
                     grid.innerHTML = data.results.map(m => `
-                        <div onclick="openPlayer('${m.id}')" class="bg-zinc-900/60 border border-zinc-800 rounded-xl overflow-hidden group cursor-pointer transition transform hover:-translate-y-1">
+                        <div onclick="window.location.href='/embed/${m.id}'" class="bg-zinc-900/60 border border-zinc-800 rounded-xl overflow-hidden group cursor-pointer transition transform hover:-translate-y-1">
                             <div class="relative aspect-[2/3] bg-zinc-950 overflow-hidden">
                                 <img src="${m.poster}" class="w-full h-full object-cover group-hover:scale-105 transition duration-500" alt="${m.title}">
                                 <div class="absolute top-2 right-2 bg-black/70 backdrop-blur px-2 py-0.5 rounded text-[10px] font-mono text-amber-400">★ ${m.rating}</div>
@@ -107,27 +51,8 @@
                         </div>
                     `).join('');
                 }
-            } catch(e) { console.error("Catalog load error:", e); }
+            } catch(e) { console.error("Erro ao carregar:", e); }
         }
-
-        function openPlayer(id) {
-            // Abre o player embed na mesma aba ou em popup limpo para evitar bloqueios de iframe de terceiros
-            window.location.href = `/embed/${id}`;
-        }
-
-        function switchTab(tab) {
-            if(tab === 'history') {
-                document.getElementById('main-content').innerHTML = `
-                    <div class="text-center py-20 space-y-3">
-                        <i class="fa-solid fa-clock-rotate-left text-4xl text-indigo-500"></i>
-                        <h2 class="text-xl font-bold text-white">No Watch History Yet</h2>
-                        <p class="text-xs text-zinc-400">Movies and TV series you start streaming will automatically appear here.</p>
-                    </div>`;
-                return;
-            }
-            location.reload();
-        }
-
         loadCatalog();
     </script>
 </body>
