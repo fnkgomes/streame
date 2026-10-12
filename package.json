@@ -1,0 +1,12 @@
+{
+  "name": "streame",
+  "version": "1.0.0",
+  "description": "High-performance video streaming embed engine and developer portal",
+  "main": "server.js",
+  "scripts": {
+    "start": "node server.js"
+  },
+  "dependencies": {
+    "express": "^4.19.2"
+  }
+}
