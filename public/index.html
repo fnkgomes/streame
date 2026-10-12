@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>frameXTV - Catálogo Oficial TMDB</title>
+    <title>Streame - Portal de Streaming</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <script>
@@ -18,18 +18,22 @@
     <header class="border-b border-zinc-800 bg-zinc-950/80 backdrop-blur sticky top-0 z-50">
         <div class="max-w-7xl mx-auto px-4 h-16 flex items-center justify-between">
             <div class="flex items-center space-x-2">
-                <div class="w-8 h-8 rounded-lg bg-indigo-600 flex items-center justify-center font-black text-white">fX</div>
-                <span class="font-bold text-lg text-white tracking-wider">frame<span class="text-indigo-500">X</span>TV</span>
+                <div class="w-8 h-8 rounded-lg bg-indigo-600 flex items-center justify-center font-black text-white">ST</div>
+                <span class="font-bold text-lg text-white tracking-wider">Stream<span class="text-indigo-500">e</span></span>
             </div>
         </div>
     </header>
 
     <main class="flex-grow max-w-7xl w-full mx-auto px-4 py-8 space-y-8">
-        <h2 class="text-lg font-bold text-white flex items-center"><i class="fa-solid fa-fire text-indigo-500 mr-2"></i> Lançamentos e Tendências TMDB</h2>
+        <h2 class="text-lg font-bold text-white flex items-center"><i class="fa-solid fa-fire text-indigo-500 mr-2"></i> Tendências e Filmes Populares</h2>
         <div id="media-grid" class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-4">
-            <div class="text-zinc-500 text-xs col-span-full py-10 text-center">Carregando catálogo do TMDB...</div>
+            <div class="text-zinc-500 text-xs col-span-full py-10 text-center">Carregando catálogo...</div>
         </div>
     </main>
+
+    <footer class="border-t border-zinc-800 bg-zinc-950 py-8 text-center text-xs text-zinc-500">
+        <p>&copy; 2026 Streame. All rights reserved.</p>
+    </footer>
 
     <script>
         async function loadCatalog() {
@@ -51,7 +55,9 @@
                         </div>
                     `).join('');
                 }
-            } catch(e) { console.error("Erro ao carregar:", e); }
+            } catch(e) { 
+                console.error("Erro ao carregar:", e); 
+            }
         }
         loadCatalog();
     </script>

@@ -1,5 +1,5 @@
 /**
- * Streame / FrameXTV - Powered by TMDB API & Vercel Serverless
+ * Streame Engine - Powered by TMDB & Fallback Engine
  */
 
 const express = require('express');
@@ -7,23 +7,33 @@ const path = require('path');
 const app = express();
 const PORT = process.env.PORT || 3000;
 
-// Insira sua Chave de API do TMDB aqui ou configure como Variável de Ambiente na Vercel (TMDB_API_KEY)
-const TMDB_API_KEY = process.env.TMDB_API_KEY || '81381f30d5122abb419c288a2bc2f593';
+const TMDB_API_KEY = process.env.TMDB_API_KEY || '';
 
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 app.use(express.static(path.join(__dirname, 'public')));
 
-// API Proxy para buscar filmes populares diretamente do TMDB oficial
+// Catálogo de segurança (fallback caso a API do TMDB falhe ou não tenha chave)
+const FALLBACK_MEDIA = [
+    { id: "550", title: "Fight Club", year: "1999", rating: "8.8", type: "movie", poster: "https://image.tmdb.org/t/p/w500/pB8BM7pdSp6B6Ih7QZ4DrQ3PmJK.jpg" },
+    { id: "1396", title: "Breaking Bad", year: "2008", rating: "9.5", type: "tv", poster: "https://image.tmdb.org/t/p/w500/ggFHVNu6YYI5L9pCfOacjizRGt.jpg" },
+    { id: "1368337", title: "The Odyssey", year: "2026", rating: "8.9", type: "movie", poster: "https://images.unsplash.com/photo-1514539079130-25950c84af65?auto=format&fit=crop&w=600&q=80" },
+    { id: "27205", title: "Inception", year: "2010", rating: "8.8", type: "movie", poster: "https://image.tmdb.org/t/p/w500/edv5CZvWj09upOsy2Y6IwDhK8bt.jpg" },
+    { id: "157336", title: "Interstellar", year: "2014", rating: "8.7", type: "movie", poster: "https://image.tmdb.org/t/p/w500/gEU2QniE6E77NI6lCU6MxlNBvIx.jpg" }
+];
+
 app.get('/api/media', async (req, res) => {
     try {
-        if (!TMDB_API_KEY || TMDB_API_KEY.includes('SUA_CHAVE')) {
-            return res.status(500).json({ success: false, error: "TMDB API Key não configurada no servidor." });
+        if (!TMDB_API_KEY) {
+            return res.json({ success: true, results: FALL_BACK_MEDIA || FALLBACK_MEDIA });
         }
 
-        // Busca filmes populares do TMDB
         const response = await fetch(`https://api.themoviedb.org/3/trending/all/day?api_key=${TMDB_API_KEY}&language=pt-BR`);
         const data = await response.json();
+
+        if (!data.results) {
+            return res.json({ success: true, results: FALLBACK_MEDIA });
+        }
 
         const results = data.results.map(item => ({
             id: item.id.toString(),
@@ -31,28 +41,32 @@ app.get('/api/media', async (req, res) => {
             year: (item.release_date || item.first_air_date || '2026').split('-')[0],
             rating: item.vote_average ? item.vote_average.toFixed(1) : '8.0',
             type: item.media_type || 'movie',
-            poster: item.poster_path ? `https://image.tmdb.org/t/p/w500${item.poster_path}` : 'https://images.unsplash.com/photo-1536440136628-849c177e76a1?auto=format&fit=crop&w=600&q=80',
-            backdrop: item.backdrop_path ? `https://image.tmdb.org/t/p/original${item.backdrop_path}` : ''
+            poster: item.poster_path ? `https://image.tmdb.org/t/p/w500${item.poster_path}` : 'https://images.unsplash.com/photo-1536440136628-849c177e76a1?auto=format&fit=crop&w=600&q=80'
         }));
 
         res.json({ success: true, results });
     } catch (error) {
-        console.error("Erro ao buscar TMDB:", error);
-        res.status(500).json({ success: false, error: error.message });
+        // Em caso de qualquer erro na API externa, retorna o catálogo de fallback para nunca travar a tela
+        res.json({ success: true, results: FALLBACK_MEDIA });
     }
 });
 
-// Rota de Embed que garante a reprodução via extrator universal vidsrc
-app.get('/embed/:tmdbId', (req, res) => {
-    const { tmdbId } = req.params;
-    const embedTarget = `https://vidsrc.to/embed/movie/${tmdbId}`;
+// Rota de Embed do Player
+app.get('/embed/:tmdbId/:season?/:episode?', (req, res) => {
+    const { tmdbId, season, episode } = req.params;
+    
+    // Suporte a filmes e séries (episódios)
+    let embedTarget = `https://vidsrc.to/embed/movie/${tmdbId}`;
+    if (season && episode) {
+        embedTarget = `https://vidsrc.to/embed/tv/${tmdbId}/${season}/${episode}`;
+    }
 
     res.send(`<!DOCTYPE html>
 <html lang="en" class="dark h-full">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Stream Player | FrameXTV</title>
+    <title>Player | Streame</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <style>
         body { background-color: #000; margin: 0; height: 100vh; overflow: hidden; font-family: system-ui, sans-serif; }
@@ -74,13 +88,12 @@ app.get('/embed/:tmdbId', (req, res) => {
 </html>`);
 });
 
-// Fallback universal para o frontend
 app.get('*', (req, res) => {
     res.sendFile(path.join(__dirname, 'public', 'index.html'));
 });
 
 if (process.env.NODE_ENV !== 'production') {
-    app.listen(PORT, () => console.log(`Server running on port ${PORT}`));
+    app.listen(PORT, () => console.log(`Streame server running on port ${PORT}`));
 }
 
 module.exports = app;
